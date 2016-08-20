@@ -1,0 +1,20 @@
+
+.wikicontent {
+  font-size: 1em;
+  line-height: 1.8em;
+  color: dark-grey;
+}
+.outcontent {
+  font-size: 1em;
+  line-height: 2em;
+  color: dark-grey;
+  text-align: justify;
+  margin-left: 4px;
+  margin-right: 4px;
+  text-indent: 2em;
+}
+#outcont{
+  float:left;
+  margin: 0 15px 15px 0 ;
+   border-radius: 4px;
+}

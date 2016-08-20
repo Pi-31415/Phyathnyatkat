@@ -1,0 +1,185 @@
+<html lang="en" >
+<head>
+  <title>Phyathnyatkat</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="libs/angular-material/angular-material.min.css">
+  <link rel="stylesheet" type="text/css" href="css/custom.css">
+</head>
+<body>
+  <script src="angular.min.js"></script>
+  <div ng-app="myApp">
+  <div ng-controller="MainController">
+     <div ng-cloak>
+       <md-content>
+         <md-toolbar>
+            <div class="md-toolbar-tools">
+              <h2>
+                <span>Phyathnyatkat</span>
+              </h2>
+              <span flex></span>
+              <md-button class="md-icon-button" aria-label="More">
+                <md-icon md-svg-icon="img/icons/more.svg"></md-icon>
+              </md-button>
+            </div>
+          </md-toolbar>
+         <md-tabs md-dynamic-height md-border-bottom>
+           <md-tab label="Search">
+             <md-content class="md-padding">
+               <md-card>
+                <md-card-content>
+                  <form name="search" ng-submit="getit(param);">
+                    <md-input-container class="md-block" flex-gt-xs>
+                      <label>What is your assignment topic?</label>
+                      <input ng-model="param" required>
+                    </md-input-container>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end center">
+                  <md-button class="md-warn md-raised" ng-click="clearit();">Clear</md-button>
+                  <md-button class="md-primary md-raised" type = "submit">Search</md-button>
+                  </form>
+                </md-card-actions>
+              </md-card>
+              <div class="center">
+                <center>
+                  <h4>
+                    {{status}}
+                  </h4>
+                </center>
+                  <md-card>
+                  <div ng-repeat="content in results">
+                    <div ng-repeat="(x,y) in content.pages">
+                      <md-card-title>
+                        <md-card-title-text>
+                          <span class="md-headline">{{y.title}}</span>
+                          <span class="md-subhead">{{y.extract | stripHTML}}</span>
+                        </md-card-title-text>
+                        <md-card-title-media>
+                          <div class="md-media-sm card-media">
+                            <div ng-repeat="content in imgurl">
+                              <div ng-repeat="(x,y) in content.pages">
+                                      <img src="{{y.thumbnail.source}}" alt="Picture of {{param}}" />
+                              </div>
+                           </div>
+                          </div>
+                        </md-card-title-media>
+                      </md-card-title>
+                        <md-card-actions layout="row" layout-align="center">
+                          <md-button class="md-primary" ng-click="more();">See More</md-button>
+                          <br />
+                        </md-card-actions>
+                    </div>
+                 </div>
+                 </md-card>
+                 <br />
+                 <br />
+              </div>
+             </md-content>
+           </md-tab>
+           <md-tab label="Edit">
+             <md-content class="md-padding">
+               <h4>{{processtitle}}</h4>
+               <!-- processing starts here -->
+               <h3>Settings</h3>
+                <md-switch ng-model="assign.info" aria-label="Add your Info">
+                  Add Name,Class
+                </md-switch>
+                <md-switch ng-model="assign.picture" aria-label="Add Picture in Output">
+                  Add Picture in Output
+                </md-switch>
+                <div ng-show= "assign.info">
+               <h3>Article Information</h3>
+               <form>
+                 <md-input-container class="md-block">
+                   <label>Assignment Title</label>
+                   <input ng-model="assign.head" type="text" flex-gt-sm>
+                 </md-input-container>
+                 <md-input-container class="md-block">
+                   <label>Your Name</label>
+                   <input ng-model="assign.name" type="text" flex-gt-sm>
+                 </md-input-container>
+                 <div layout-gt-sm="row">
+                 <md-input-container class="md-block">
+                   <label>Your Class</label>
+                   <input ng-model="assign.class" type="text" flex-gt-sm>
+                 </md-input-container>
+                 <md-input-container class="md-block">
+                   <label>Subject</label>
+                   <input ng-model="assign.subject" type="text" flex-gt-sm>
+                 </md-input-container>
+                 <md-datepicker ng-model="assign.date" md-placeholder="Date" class="md-icon-float md-block">
+                </md-datepicker>
+               </div>
+               </form>
+               </div>
+               <div ng-repeat="content in results">
+                 <div ng-repeat="(x,y) in content.pages">
+                         <h3>Article Body</h3>
+                         <p class="outcontent">{{y.extract | stripHTML}}</p>
+                         <center>
+                           <md-button class="md-primary" ng-click="addline();">Add more lines</md-button>
+                           <md-button class="md-warn" ng-click="remline();">Remove lines</md-button>
+                         </center>
+                         <br />
+                 </div>
+              </div>
+             </md-content>
+           </md-tab>
+           <md-tab label="Output">
+             <md-content class="md-padding">
+               <!-- <pre ng-bind="results | json | stripHTML"></pre> -->
+                 <div ng-repeat="content in results">
+                   <div ng-repeat="(x,y) in content.pages">
+                     <div ng-show= "assign.info">
+                       <center>
+                         <h2>{{assign.head}}</h2>
+                       </center>
+                       <table>
+                         <tr>
+                           <td>By</td><td>{{assign.name}}</td>
+                         </tr>
+                         <tr>
+                           <td>Class :</td><td>{{assign.class}}</td>
+                         </tr>
+                         <tr>
+                           <td>Subject :</td><td>{{assign.subject}}</td>
+                         </tr>
+                         <tr>
+                           <td>Date :</td><td>{{assign.date | date}}</td>
+                         </tr>
+                       </table>
+                    </div>
+                    <center>
+                      <h3 ng-hide= "assign.info">{{y.title}}</h3>
+                    </center>
+                     <p>
+                       <div class="md-media-sm card-media" ng-show= "assign.picture">
+                         <div ng-repeat="content in imgurlo">
+                           <div ng-repeat="(x,y) in content.pages">
+                                   <img id="outcont" src="{{y.thumbnail.source}}" alt="Picture of {{param}}" />
+                           </div>
+                        </div>
+                       </div>
+                     <div class="outcontent">
+                        {{y.extract | stripHTML}}
+                     </div></p>
+                     <br />
+                   </div>
+                </div>
+              <!-- predefinded content ends here -->
+             </md-content>
+           </md-tab>
+         </md-tabs>
+       </md-content>
+     </div>
+  </div>
+  </div>
+</body>
+<script src="libs/angular/angular.min.js"></script>
+<script src="libs/angular-animate/angular-animate.min.js"></script>
+<script src="libs/angular-aria/angular-aria.min.js"></script>
+<script src="libs/angular-messages/angular-messages.min.js"></script>
+<script src="libs/angular-material/angular-material.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
